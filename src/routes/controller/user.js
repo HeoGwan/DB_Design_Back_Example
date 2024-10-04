@@ -2,7 +2,7 @@
 
 import express from 'express';
 // service의 함수를 가져오기 위한 코드
-import { getOneUser, getUser, postUser, signin, signup } from '../service/user';
+import { getOneUser, getUser, postUser, signin, signout, signup, session } from '../service/user';
 // 라우터 설정을 위한 변수
 const router = express.Router();
 
@@ -12,6 +12,8 @@ router.get('/:id', getOneUser);
 router.post('/', postUser);
 router.post('/signin', signin);
 router.post('/signup', signup);
+router.post('/signout', signout);
+router.post('/session', session);
 
 // 설정된 라우터를 내보갬
 export default router;

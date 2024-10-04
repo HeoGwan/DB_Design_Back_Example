@@ -11,6 +11,7 @@ import cors from 'cors';
 // 사용자가 설정한 라우터를 가져오기 위한 코드
 // routes폴더의 index.js에서 일괄적으로 가져온다.
 import { UserRouter, TestRouter } from './routes';
+import session from 'express-session';
 
 // express 설정을 위한 변수
 const app = express();
@@ -50,7 +51,29 @@ app.use(express.static(path.join(__dirname, 'public')));
  * 위 코드는 3개의 도메인에서 GET, POST, PUT, DELETE 메소드 요청만 허용하는 방법이다.
  * credentials: true 란? 간단히 cookie 설정을 위한 설정이라고 보면 된다.
  */
-app.use(cors())
+/**
+ * 세션을 유지하기 위해선 cors에서 설정을 해줘야 한다.
+ * cors의 origin에 프론트의 도메인을 넣어준다.
+ * credentials: true 설정을 해야만 프론트에서 쿠키를 받아 세션에 저장할 수 있다.
+ */
+app.use(cors({
+  origin: [
+    '*',
+    'http://localhost:3000',
+  ],
+  credentials: true,
+}))
+// 아래는 express-session의 설정 방법이다.
+app.use(session({
+  secret: 'db_design',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    maxAge : 5300000,
+  },
+}))
 
 
 // 사용자가 추가한 라우터 설정

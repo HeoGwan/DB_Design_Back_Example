@@ -78,10 +78,13 @@ export const postUser = async (req, res) => {
 
 export const signin = async (req, res) => {
     try {
+        console.log(req)
         const { id, pw } = req.body;
 
         const getUserQuery = 'select * from user where id = ?';
         const [[user]] = await db.query(getUserQuery, [id]);
+
+        console.log(req.body);
 
         if (!user) {
             throw new Error(`invalid id`);
@@ -97,15 +100,20 @@ export const signin = async (req, res) => {
             phone: user.phone,
         };
 
-        return res.status(200).json({
-            status: 4091,
-            message: 'success',
-            data,
+        req.session.user = data;
+
+        req.session.save(() => {
+            return res.status(200).json({
+                status: 4091,
+                message: 'success',
+                data,
+            });
         });
+
     } catch (e) {
         return res.status(200).json({
             status: 500,
-            message: 'signin error',
+            message: e.message,
             data: e,
         });
     }
@@ -137,4 +145,39 @@ export const signup = async (req, res) => {
             data: e,
         });
     }
+}
+
+export const signout = async (req, res) => {
+    if (!req.session.user) {
+        return res.status(200).json({
+            status: 400,
+            message: 'not authorized',
+            data: null,
+        });
+    }
+    
+    req.session.destroy(() => {
+        return res.status(200).json({
+            status: 200,
+            message: 'ok',
+            data: null,
+        });
+    });
+}
+
+export const session = async (req, res) => {
+    console.log(req.session.user);
+    if (!req.session.user) {
+        return res.status(200).json({
+            status: 404,
+            message: 'no has user in session',
+            data: null,
+        });
+    }
+
+    return res.status(200).json({
+        status: 200,
+        message: 'ok',
+        data: req.session.user,
+    });
 }
