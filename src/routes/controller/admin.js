@@ -1,15 +1,15 @@
 import express from 'express';
-import { TestService } from '../service/test';
-// 라우터 설정을 위한 변수
+import { AdminService, adminSignin } from '../service/admin';
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+// 어드민 로그인
+router.post('/signin', async (req, res) => {
     try {
-        const testService = new TestService();
-        const data = await testService.test();
+        const adminService = new AdminService();
+        const data = await adminService.adminSignin(req.body);
 
         return res.status(200).json({
-            status: 200,
+            status: 4091,
             message: 'success',
             data,
         });
@@ -17,10 +17,9 @@ router.get('/', async (req, res) => {
         return res.status(200).json({
             status: 500,
             message: 'server error',
-            data: e.message,
+            data: e.message
         });
     }
 });
 
-// 설정된 라우터를 내보갬
 export default router;

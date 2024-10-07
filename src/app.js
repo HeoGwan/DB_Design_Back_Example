@@ -10,7 +10,7 @@ import cors from 'cors';
 
 // 사용자가 설정한 라우터를 가져오기 위한 코드
 // routes폴더의 index.js에서 일괄적으로 가져온다.
-import { UserRouter, TestRouter } from './routes';
+import { UserRouter, TestRouter, AdminRouter } from './routes';
 import session from 'express-session';
 
 // express 설정을 위한 변수
@@ -81,6 +81,7 @@ app.use(session({
 // ex) 해당 코드는 http://localhost:[포트]/user 를 통해 연결된다.
 app.use('/test', TestRouter);
 app.use('/user', UserRouter);
+app.use('/admin', AdminRouter);
 
 
 // 아래 내용은 에러 설정을 위한 부분이므로 보실 필요 없습니다.

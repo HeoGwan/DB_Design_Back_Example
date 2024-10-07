@@ -4,3 +4,4 @@
 // ex) 장바구니 라우터이면 export { default as CartRouter } from ~~~ 와 같은 식으로 작성하면 된다.
 export { default as UserRouter } from './controller/user';
 export { default as TestRouter } from './controller/test';
+export { default as AdminRouter } from './controller/admin';
